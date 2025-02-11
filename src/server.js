@@ -23,11 +23,22 @@ fastify.get("/dmz", {}, (req, res) => {
   res.send({ replique: "Ca pourrait être mieux protégé..." });
 });
 
+// after sert à garantir que ce qui est définies dans le callback sera enregistre apres les plugins (validate, authenticate)
 fastify.after(() => {
   fastify.route({
     method: "GET",
     url: "/secu",
     onRequest: fastify.basicAuth,
+    handler: async (req, reply) => {
+      return {
+        replique: "Un Lannister paye toujours ses dettes !",
+      };
+    },
+  });
+  fastify.route({
+    method: "GET",
+    url: "/autre",
+    // onRequest: fastify.basicAuth,
     handler: async (req, reply) => {
       return {
         replique: "Un Lannister paye toujours ses dettes !",
